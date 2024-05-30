@@ -21,7 +21,7 @@
     "url": "https://guillaume.sh"
   },
   "scripts": {
-    "build": "ncc build src/index.js --license licenses.txt"
+    "build": "node --openssl-legacy-provider ./node_modules/@vercel/ncc/dist/ncc/cli.js build src/index.js --license licenses.txt"
   },
   "dependencies": {
     "@actions/core": "^1.6.0",
