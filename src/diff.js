@@ -41,26 +41,27 @@ function computeDiff(base, head, options = {}) {
       countRegression++;
     }
 
-    table.push({
-      icon: fileRegression ? ICONS.KO : ICONS.OK,
-      filename: file,
-      lines: {
-        pct: _renderPct(head[file].lines.pct, false),
-        diff: _renderPct(element.lines.pct),
-      },
-      branches: {
-        pct: _renderPct(head[file].branches.pct, false),
-        diff: _renderPct(element.branches.pct),
-      },
-      functions: {
-        pct: _renderPct(head[file].functions.pct, false),
-        diff: _renderPct(element.functions.pct),
-      },
-      statements: {
-        pct: _renderPct(head[file].statements.pct, false),
-        diff: _renderPct(element.statements.pct),
-      },
-    });
+    // Wll be done later
+    // table.push({
+    //   icon: fileRegression ? ICONS.KO : ICONS.OK,
+    //   filename: file,
+    //   lines: {
+    //     pct: _renderPct(head[file].lines.pct, false),
+    //     diff: _renderPct(element.lines.pct),
+    //   },
+    //   branches: {
+    //     pct: _renderPct(head[file].branches.pct, false),
+    //     diff: _renderPct(element.branches.pct),
+    //   },
+    //   functions: {
+    //     pct: _renderPct(head[file].functions.pct, false),
+    //     diff: _renderPct(element.functions.pct),
+    //   },
+    //   statements: {
+    //     pct: _renderPct(head[file].statements.pct, false),
+    //     diff: _renderPct(element.statements.pct),
+    //   },
+    // });
   });
 
   if (table.length > 0 && countRegression > 0) {

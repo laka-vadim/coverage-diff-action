@@ -29,8 +29,6 @@ async function run() {
 
   const issue_number = context?.payload?.pull_request?.number;
 
-
-  core.info(`Posting a comment on PR...`);
   if (issue_number) {
     core.info(`Posting a comment on PR...`);
     await deleteExistingComments(octokit, context.repo, issue_number);
@@ -42,7 +40,7 @@ async function run() {
   }
 
   if (!allowedToFail && diff.regression) {
-    throw new Error("Total coverage is lower than the default branch");
+    throw new Error("Total coverage is lower than the master branch");
   }
 }
 
