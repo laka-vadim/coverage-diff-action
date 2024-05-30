@@ -18,6 +18,7 @@ const { computeDiff } = require("./diff");
 const { addComment, deleteExistingComments } = require("./comment");
 
 const { context } = github;
+core.info(`Ready...`);
 
 async function run() {
   const tmpPath = await mkdir(path.join(process.env.GITHUB_WORKSPACE, "tmp"), {
@@ -39,8 +40,10 @@ async function run() {
 
   const octokit = github.getOctokit(githubToken);
 
+  core.info(`Parsing input files...`);
   const head = JSON.parse(await readFile(coverageFilename, "utf8"));
   const base = JSON.parse(await readFile(path.join(baseSummaryFilename), "utf8"));
+  core.info(`Parsing input files failed`);
 
   const pct = average(
     Object.keys(head.total).map((t) => head.total[t].pct),
@@ -88,9 +91,11 @@ async function run() {
     const issue_number = context?.payload?.pull_request?.number;
     const allowedToFail = core.getBooleanInput("allowed-to-fail");
 
+    core.info(`Computing diff between base and head coverage reports...`);
     const diff = computeDiff(base, head, { allowedToFail });
 
     if (issue_number) {
+      core.info(`Posting a comment on PR...`);
       await deleteExistingComments(octokit, context.repo, issue_number);
 
       core.info("Add a comment with the diff coverage report");

@@ -95,9 +95,7 @@ function computeDiff(base, head, options = {}) {
 
 | Lines           | Branches           | Functions           | Statements           |
 | --------------- | ------------------ | ------------------- | -------------------- |
-| ${totals.lines} | ${totals.branches} | ${totals.functions} | ${
-      totals.statements
-    } | 
+| ${totals.lines} | ${totals.branches} | ${totals.functions} | ${totals.statements} | 
 ${
   table.length > 0
     ? `
