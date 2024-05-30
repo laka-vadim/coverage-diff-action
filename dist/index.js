@@ -9148,13 +9148,14 @@ async function run() {
   core.info(`Parsing input files...`);
   const head = JSON.parse(await readFile(coverageFilename, "utf8"));
   const base = JSON.parse(await readFile(path.join(baseSummaryFilename), "utf8"));
+  const allowedToFail = core.getBooleanInput("allowed-to-fail");
 
 
   core.info(`Computing diff between base and head coverage reports...`);
   const diff = computeDiff(base, head, { allowedToFail });
 
   const issue_number = context?.payload?.pull_request?.number;
-  const allowedToFail = core.getBooleanInput("allowed-to-fail");
+
 
   core.info(`Posting a comment on PR...`);
   if (issue_number) {
