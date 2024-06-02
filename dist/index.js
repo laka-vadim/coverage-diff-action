@@ -9159,8 +9159,8 @@ async function run() {
   const octokit = github.getOctokit(githubToken);
 
   core.info(`Parsing input files...`);
-  const head = parseCoverageFile(coverageFilename);
-  const base = parseCoverageFile(baseSummaryFilename);
+  const head = await parseCoverageFile(coverageFilename);
+  const base = await parseCoverageFile(baseSummaryFilename);
   const allowedToFail = core.getBooleanInput("allowed-to-fail");
 
 
