@@ -12,6 +12,17 @@ const { addComment, deleteExistingComments } = require("./comment");
 const { context } = github;
 core.info(`Ready...`);
 
+async function parseCoverageFile(filename) {
+  const input = JSON.parse(await readFile(filename, "utf8"));
+
+  return Object.keys(input).reduce((acc, key) => {
+    const PathRelativeRepo = new RegExp(`(${context.repo.repo})(.+)`)
+    const newKey = key === "total" ? key : key.match(PathRelativeRepo)[0];
+    acc[newKey] = acc[key];
+    return acc;
+  }, {});
+}
+
 async function run() {
   const githubToken = core.getInput("github-token");
   const baseSummaryFilename = core.getInput("base-summary-filename");
@@ -19,8 +30,8 @@ async function run() {
   const octokit = github.getOctokit(githubToken);
 
   core.info(`Parsing input files...`);
-  const head = JSON.parse(await readFile(coverageFilename, "utf8"));
-  const base = JSON.parse(await readFile(path.join(baseSummaryFilename), "utf8"));
+  const head = parseCoverageFile(coverageFilename);
+  const base = parseCoverageFile(baseSummaryFilename);
   const allowedToFail = core.getBooleanInput("allowed-to-fail");
 
 

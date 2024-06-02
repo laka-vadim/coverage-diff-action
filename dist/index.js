@@ -8860,27 +8860,26 @@ function computeDiff(base, head, options = {}) {
       countRegression++;
     }
 
-    // Wll be done later
-    // table.push({
-    //   icon: fileRegression ? ICONS.KO : ICONS.OK,
-    //   filename: file,
-    //   lines: {
-    //     pct: _renderPct(head[file].lines.pct, false),
-    //     diff: _renderPct(element.lines.pct),
-    //   },
-    //   branches: {
-    //     pct: _renderPct(head[file].branches.pct, false),
-    //     diff: _renderPct(element.branches.pct),
-    //   },
-    //   functions: {
-    //     pct: _renderPct(head[file].functions.pct, false),
-    //     diff: _renderPct(element.functions.pct),
-    //   },
-    //   statements: {
-    //     pct: _renderPct(head[file].statements.pct, false),
-    //     diff: _renderPct(element.statements.pct),
-    //   },
-    // });
+    table.push({
+      icon: fileRegression ? ICONS.KO : ICONS.OK,
+      filename: file,
+      lines: {
+        pct: _renderPct(head[file].lines.pct, false),
+        diff: _renderPct(element.lines.pct),
+      },
+      branches: {
+        pct: _renderPct(head[file].branches.pct, false),
+        diff: _renderPct(element.branches.pct),
+      },
+      functions: {
+        pct: _renderPct(head[file].functions.pct, false),
+        diff: _renderPct(element.functions.pct),
+      },
+      statements: {
+        pct: _renderPct(head[file].statements.pct, false),
+        diff: _renderPct(element.statements.pct),
+      },
+    });
   });
 
   if (table.length > 0 && countRegression > 0) {
@@ -9140,6 +9139,17 @@ const { addComment, deleteExistingComments } = __nccwpck_require__(427);
 const { context } = github;
 core.info(`Ready...`);
 
+async function parseCoverageFile(filename) {
+  const input = JSON.parse(await readFile(filename, "utf8"));
+
+  return Object.keys(input).reduce((acc, key) => {
+    const PathRelativeRepo = new RegExp(`(${context.repo.repo})(.+)`)
+    const newKey = key === "total" ? key : key.match(PathRelativeRepo)[0];
+    acc[newKey] = acc[key];
+    return acc;
+  }, {});
+}
+
 async function run() {
   const githubToken = core.getInput("github-token");
   const baseSummaryFilename = core.getInput("base-summary-filename");
@@ -9147,8 +9157,8 @@ async function run() {
   const octokit = github.getOctokit(githubToken);
 
   core.info(`Parsing input files...`);
-  const head = JSON.parse(await readFile(coverageFilename, "utf8"));
-  const base = JSON.parse(await readFile(path.join(baseSummaryFilename), "utf8"));
+  const head = parseCoverageFile(coverageFilename);
+  const base = parseCoverageFile(baseSummaryFilename);
   const allowedToFail = core.getBooleanInput("allowed-to-fail");
 
 
@@ -9157,8 +9167,6 @@ async function run() {
 
   const issue_number = context?.payload?.pull_request?.number;
 
-
-  core.info(`Posting a comment on PR...`);
   if (issue_number) {
     core.info(`Posting a comment on PR...`);
     await deleteExistingComments(octokit, context.repo, issue_number);
