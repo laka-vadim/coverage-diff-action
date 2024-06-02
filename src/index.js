@@ -33,7 +33,9 @@ async function run() {
 
   core.info(`Parsing input files...`);
   const head = await parseCoverageFile(coverageFilename);
+  core.info(head);
   const base = await parseCoverageFile(baseSummaryFilename);
+  core.info(base);
   const allowedToFail = core.getBooleanInput("allowed-to-fail");
 
 
