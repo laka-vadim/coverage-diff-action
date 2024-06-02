@@ -20,7 +20,7 @@ async function parseCoverageFile(filename) {
   return Object.keys(input).reduce((acc, key) => {
     const pathRelativeRepo = new RegExp(`(${context.repo.repo})(.+)`)
     const newKey = key === "total" ? key : key.match(pathRelativeRepo)[0];
-    acc[newKey] = acc[key];
+    acc[newKey] = input[key];
     return acc;
   }, {});
 }
@@ -33,9 +33,7 @@ async function run() {
 
   core.info(`Parsing input files...`);
   const head = await parseCoverageFile(coverageFilename);
-  core.info(head);
   const base = await parseCoverageFile(baseSummaryFilename);
-  core.info(base);
   const allowedToFail = core.getBooleanInput("allowed-to-fail");
 
 
