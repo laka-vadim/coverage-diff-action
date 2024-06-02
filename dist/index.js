@@ -9141,10 +9141,12 @@ core.info(`Ready...`);
 
 async function parseCoverageFile(filename) {
   const input = JSON.parse(await readFile(filename, "utf8"));
+  core.info('Replace path in report...');
+  core.info(context.repo.repo);
 
   return Object.keys(input).reduce((acc, key) => {
-    const PathRelativeRepo = new RegExp(`(${context.repo.repo})(.+)`)
-    const newKey = key === "total" ? key : key.match(PathRelativeRepo)[0];
+    const pathRelativeRepo = new RegExp(`(${context.repo.repo})(.+)`)
+    const newKey = key === "total" ? key : key.match(pathRelativeRepo)[0];
     acc[newKey] = acc[key];
     return acc;
   }, {});
