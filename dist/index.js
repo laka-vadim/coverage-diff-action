@@ -8908,7 +8908,7 @@ function computeDiff(base, head, options = {}) {
   }
 
   return {
-    regression: globalRegression,
+    regression: Boolean(countRegression),
     markdown: `
 ### ${totalTitle}
 
