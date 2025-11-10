@@ -1,13 +1,12 @@
 const {
   readFile,
 } = require("fs/promises");
-const { existsSync } = require("fs");
-const path = require("path");
 const core = require("@actions/core");
 const github = require("@actions/github");
 
 const { computeDiff } = require("./diff");
 const { addComment, deleteExistingComments } = require("./comment");
+const { runAnnotation } = require("./annotateUncoveredLines");
 
 const { context } = github;
 core.info(`Ready...`);
@@ -30,6 +29,9 @@ async function run() {
   const baseSummaryFilename = core.getInput("base-summary-filename");
   const coverageFilename = core.getInput("coverage-filename");
   const octokit = github.getOctokit(githubToken);
+
+  core.info(`Annotate uncovered lines...`);
+  runAnnotation();
 
   core.info(`Parsing input files...`);
   const head = await parseCoverageFile(coverageFilename);
