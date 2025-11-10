@@ -30,7 +30,7 @@ async function run() {
   const coverageFilename = core.getInput("coverage-filename");
   const octokit = github.getOctokit(githubToken);
 
-  core.info(`Annotate uncovered lines...`);
+  core.info(`Annotate uncovered lines..`);
   runAnnotation();
 
   core.info(`Parsing input files...`);
