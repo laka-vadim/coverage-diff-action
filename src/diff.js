@@ -6,7 +6,7 @@ const ICONS = {
   KO: "🔴",
 };
 
-const CRITERIAS = ["lines", "branches", "functions", "statements"];
+const CRITERIAS = ["branches", "functions", "statements"];
 
 function _renderPct(pct, addSign = true) {
   if (addSign && pct >= 0) {
@@ -44,10 +44,6 @@ function computeDiff(base, head, options = {}) {
     table.push({
       icon: fileRegression ? ICONS.KO : ICONS.OK,
       filename: file,
-      lines: {
-        pct: _renderPct(head[file].lines.pct, false),
-        diff: _renderPct(element.lines.pct),
-      },
       branches: {
         pct: _renderPct(head[file].branches.pct, false),
         diff: _renderPct(element.branches.pct),
@@ -93,9 +89,9 @@ function computeDiff(base, head, options = {}) {
     markdown: `
 ### ${totalTitle}
 
-| Lines           | Branches           | Functions           | Statements           |
-| --------------- | ------------------ | ------------------- | -------------------- |
-| ${totals.lines} | ${totals.branches} | ${totals.functions} | ${totals.statements} | 
+| Branches           | Functions           | Statements           |
+| ------------------ | ------------------- | -------------------- |
+| ${totals.branches} | ${totals.functions} | ${totals.statements} | 
 ${
   table.length > 0
     ? `
@@ -104,12 +100,10 @@ ${
 
 <details><summary>${summaryTitle}</summary>
 
-|   | File | Lines | Branches | Functions | Statements |
-| - | ---- | ----- | -------- | --------- | ---------- |${table.map(
+|   | File | Branches | Functions | Statements |
+| - | ---- | -------- | --------- | ---------- |${table.map(
         (row) =>
-          `\n| ${row.icon} | ${row.filename} | ${row.lines.pct}${
-            row.lines.diff !== "+0.00%" ? ` (${row.lines.diff})` : ""
-          } | ${row.branches.pct}${
+          `\n| ${row.icon} | ${row.filename} | ${row.branches.pct}${
             row.branches.diff !== "+0.00%" ? ` (${row.branches.diff})` : ""
           } | ${row.functions.pct}${
             row.functions.diff !== "+0.00%" ? ` (${row.functions.diff})` : ""
